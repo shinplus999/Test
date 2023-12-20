@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="utf-8"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            width: 240px;
+            height: 100px;
+            margin:auto;
+            margin-top: 10px;
+        }
+
+        .menu {
+            background-color: #333;
+            padding: 10px;
+            border: 1px solid #111;
+            text-align: left;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .header {
+            background-color: #272822;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .header:active {
+            cursor: grabbing;
+        }
+
+        .menu-title {
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom:3px;
+            background-color: #555;
+            color: white;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+            border-radius: 50%;
+        }
+
+        .checkbox-label {
+            margin-right: 10px;
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            user-select: none;
+        }
+ 
+
+        .text {
+            width: 60px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .text.current {
+            background-color: #7e7e7e70;
+            border-radius: 10px;
+            width: 150px;
+            font-weight: bold;
+            color: white;
+            margin-bottom:10px;
+            margin-top:-3px;
+        }
+
+        input[type=radio]  {
+            display: none;
+        }
+
+        .textradio {
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type=radio] + label {
+            padding: 3px 7px;
+            background: #333;
+            color: white;
+            border-radius: 5px;
+            user-select: none;
+        }
+
+        input[type=radio]:checked + label {
+            background: #007bff70;
+        }
+    </style>
+
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        h5gg.require(7.9); 
+    var h5frida=h5gg.loadPlugin("h5frida", "h5frida-16.1.4.dylib");
+    if(!h5frida) throw "Failed to load h5frida plugin";
+    
+    function ActiveCodePatch(fpath, vaddr, bytes) {
+        if(!h5frida.ActiveCodePatch(fpath, vaddr, bytes)) {
+            var result = h5frida.ApplyCodePatch(fpath, vaddr, bytes);
+            alert(fpath+":0x"+vaddr.toString(16)+"-修改失败!\n" + fpath+":0x"+vaddr.toString(16)+"-PatchFailed!\n" + result);return false;
+        } return true;
+    }
+    function DeactiveCodePatch(fpath, vaddr, bytes) {
+        return h5frida.DeactiveCodePatch(fpath, vaddr, bytes);
+    }
+
+
+
+        function fs1(input)
+    {
+        if (input.value=='fs1on') { 
+          ActiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x5179308, "F60302AA");  
+          ActiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x5BFD824, "C0010034");  
+          ActiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x5BFD8C8, "F30303AA");
+         
+    }
+    else if (input.value=='fs1off'){
+          DeactiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x5179308, "F60302AA");  
+          DeactiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x5BFD824, "C0010034");  
+          DeactiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x5BFD8C8, "F30303AA");
+    }
+    }
+
+
+
+    function fs2(input)//aim
+    {
+        if (input.value=='fs2on') { //xoay1
+          ActiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x61B4CD8, "E3008052C0035FD6"); 
+        ActiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x57AD068, "E303271EC0035FD6"); 
+    
+    }
+    else if (input.value=='fs2on1'){
+          ActiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x57AD068, "E303271EC0035FD6");    
+          DeactiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x61B4CD8, "E3008052C0035FD6");
+          h5gg.searchNumber(2500, "U32","0x100000000","0x160000000");
+          h5gg.searchNearby(0, "U32","0x50");
+          h5gg.searchNearby(25000, "U32","0x50");
+          h5gg.searchNumber(0, "U32","0x100000000","0x160000000");
+          h5gg.editAll(25000, "U32");
+          h5gg.clearResults();
+         
+    }
+    else if (input.value=='fs2off'){
+          DeactiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x61B4CD8, "E3008052C0035FD6");   
+      DeactiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x57AD068, "E303271EC0035FD6");
+         
+    }
+    }
+
+
+    function fs3(input)
+    {
+        if (input.value=='fs3on') {
+        ActiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x57C6B10, "000080D2C0031FD6"); 
+    }
+    else if (input.value=='fs3off'){
+        DeactiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x57C6B10, "000080D2C0031FD6");    
+    }
+    }
+
+
+//auto patch
+
+          DeactiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x5179308, "F60302AA");  
+          DeactiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x5BFD824, "C0010034");  
+          DeactiveCodePatch("Frameworks/UnityFramework.framework/UnityFramework", 0x5BFD8C8, "F30303AA");
+
+    </script>
+</head>
+<body>
+<div class="container">
+<div id="titleBar">
+    <div class="draggable header">
+        <div class="menu-title">Shin AOV</div>
+    </div>
+</div>
+    <div class="menu">
+            <p class="text current">MENU</p>
+            
+            <div class="menu-item">
+                <label for="checkbox1" class="checkbox-label">Hack Map:</label>
+                <input onclick="fs1(this)" name="radio-group1" type="radio" value="fs1off" id="radio-off1" checked>
+                <label for="radio-off1" class="textradio">On</label>
+                <input onclick="fs1(this)" name="radio-group1" type="radio" value="fs1on" id="radio-on1">
+                <label for="radio-on1" class="textradio">Off</label>
+            </div>
+            
+            <div class="menu-item">
+                <label for="checkbox2" class="checkbox-label">Aim Elsu:</label>
+                <input onclick="fs2(this)" name="radio-group2" type="radio" value="fs2off" id="radio-off2" checked>
+                <label for="radio-off2" class="textradio">Off</label>
+                <input onclick="fs2(this)" name="radio-group2" type="radio" value="fs2on" id="radio-on2-1">
+                <label for="radio-on2-1" class="textradio">Aim 1</label>
+                <input onclick="fs2(this)" name="radio-group2" type="radio" value="fs2on1" id="radio-on2-2">
+                <label for="radio-on2-2" class="textradio">Aim 2</label>
+            </div>
+            
+            <div class="menu-item">
+                <label for="checkbox3" class="checkbox-label">Hide name:</label>
+                <input onclick="fs3(this)" name="radio-group3" type="radio" value="fs3off" id="radio-off3" checked>
+                <label for="radio-off3" class="textradio">Off</label>
+                <input onclick="fs3(this)" name="radio-group3" type="radio" value="fs3on" id="radio-on3">
+                <label for="radio-on3" class="textradio">On</label>
+            </div>
+
+    </div>
+</body>
+</html>
